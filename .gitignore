@@ -1,0 +1,20 @@
+# Notepad++ backup files
+*.bak
+
+# Mac system files
+.DS_Store
+
+# Windows thumbnail cache
+Thumbs.db
+
+# Node modules
+node_modules/
+
+# NPM logs
+npm-debug.log
+
+# Environment files (contains sensitive info)
+.env
+
+# OS generated files
+desktop.ini
