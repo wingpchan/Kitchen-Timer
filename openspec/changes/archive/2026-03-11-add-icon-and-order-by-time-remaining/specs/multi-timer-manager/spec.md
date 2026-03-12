@@ -1,0 +1,24 @@
+## ADDED Requirements
+
+### Requirement: Sort timer cards by time remaining
+The timer manager SHALL re-sort the visible timer cards in `#timers-container` after every tick so that cards are ordered by ascending remaining seconds, with the most urgent timer (least time remaining) displayed first. 
+
+#### Scenario: Running timer with less time moves to front
+- **WHEN** two timers are running and timer B has fewer seconds remaining than timer A
+- **THEN** timer B's card SHALL appear before timer A's card in the DOM and visually on screen
+
+#### Scenario: Idle and alarm timers sort after active timers
+- **WHEN** a mix of running, paused, and idle timers are present
+- **THEN** running and paused timers SHALL appear before idle and alarm timers, sorted among themselves by ascending remaining seconds
+
+#### Scenario: Timers with equal remaining time sort alphabetically by name
+- **WHEN** two timers have the same remaining seconds
+- **THEN** sort the timer alphabetically, such as 'a' before 'b'
+
+#### Scenario: Single timer — no reorder needed
+- **WHEN** only one timer is present
+- **THEN** no sorting operation is performed and the card position is unchanged
+
+#### Scenario: Sort updates on every tick
+- **WHEN** a running timer's tick fires
+- **THEN** the manager SHALL re-evaluate and reorder all cards immediately after that tick

@@ -1,0 +1,60 @@
+## ADDED Requirements
+
+### Requirement: Timer instance encapsulation
+Each timer instance SHALL maintain its own isolated state: remaining seconds, interval handle, app state (idle | running | paused | alarm), and name.
+
+#### Scenario: Independent state
+- **WHEN** a timer instance is created
+- **THEN** it starts in idle state with 0 remaining seconds, independent of any other instance
+
+### Requirement: Start, pause, and resume
+A timer instance SHALL support starting from idle or alarm state, pausing while running, and resuming while paused.
+
+#### Scenario: Start from idle
+- **WHEN** the user presses Start on a timer with a non-zero time set
+- **THEN** the timer transitions to running state and begins counting down
+
+#### Scenario: Pause while running
+- **WHEN** the user presses Pause on a running timer
+- **THEN** the countdown halts and the timer enters paused state
+
+#### Scenario: Resume from paused
+- **WHEN** the user presses Resume on a paused timer
+- **THEN** the countdown continues from where it was paused
+
+### Requirement: Reset
+A timer instance SHALL return to idle state, clear the display to 00:00, unlock inputs, and cancel any active speech alarm when reset.
+
+#### Scenario: Reset running timer
+- **WHEN** the user clicks Reset on a running timer
+- **THEN** the countdown stops, display shows 00:00, inputs are unlocked, and state is idle
+
+#### Scenario: Reset alarm timer
+- **WHEN** the user clicks Reset on a timer in alarm state
+- **THEN** any active speech is cancelled, the blinking display clears, and state returns to idle
+
+### Requirement: Preset time selection
+A timer instance SHALL provide quick-select preset buttons (1m, 3m, 5m, 10m, 15m) that populate the time inputs when the timer is idle.
+
+#### Scenario: Select preset while idle
+- **WHEN** the user clicks a preset button while the timer is idle
+- **THEN** the minutes input is set to the preset value, seconds set to 0, and the display updates
+
+#### Scenario: Preset disabled while running
+- **WHEN** the timer is in running or paused state
+- **THEN** all preset buttons SHALL be disabled
+
+### Requirement: Speech alarm
+When a timer instance reaches zero, it SHALL speak the timer's name aloud using the Web Speech API and display a blinking alarm state.
+
+#### Scenario: Countdown reaches zero
+- **WHEN** the countdown reaches 0 seconds
+- **THEN** the timer enters alarm state, the display blinks in the alarm color, and `speechSynthesis` speaks "Sweetie, the timer" the timer's name followed by "is done. Do whatever you need to do and not burn the thing!" in an angry Scottish lady's voice (e.g. "Sweetie, the timer Pasta is done. Do whatever you need to do and not burn the thing!")
+
+#### Scenario: Speech fallback when unavailable
+- **WHEN** `window.speechSynthesis` is not available in the browser
+- **THEN** the timer SHALL fall back to a short oscillator beep alarm
+
+#### Scenario: Speech cancelled on reset
+- **WHEN** the user resets a timer that is in alarm state
+- **THEN** `speechSynthesis.cancel()` is called to stop any in-progress speech immediately

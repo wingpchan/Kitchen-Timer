@@ -1,0 +1,22 @@
+# OpenSpec project-level configuration
+# Claude Code must read and enforce these rules for every change in this project.
+
+workflow:
+  sequence:
+    - artifact: proposal
+      description: "Define what and why — problem statement, goals, non-goals, capabilities affected"
+    - artifact: design
+      description: "Define how — decisions, alternatives, risks, height/layout audits where applicable"
+    - artifact: specs
+      description: "Define requirements and scenarios — one spec file per capability affected"
+    - artifact: tasks
+      description: "Break implementation into discrete, checkable tasks referencing the spec"
+    - artifact: apply
+      description: "Implement tasks one by one, marking each complete"
+
+  rules:
+    - Each artifact MUST be completed and explicitly confirmed by the user before the next artifact is started.
+    - Claude Code MUST NOT suggest or begin 'apply' (implementation) until proposal, design, specs, and tasks are all present and the user has confirmed they are ready.
+    - Claude Code MUST NOT auto-advance between steps. After completing each artifact, stop and wait for the user to review and give explicit go-ahead.
+    - If a later artifact reveals a problem with an earlier one, update the earlier artifact first and get user confirmation before continuing forward.
+    - Tasks must reference the spec scenarios they implement. Apply must not introduce changes not covered by a task.
