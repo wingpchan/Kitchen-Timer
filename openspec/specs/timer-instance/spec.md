@@ -20,11 +20,11 @@ Each timer instance SHALL maintain its own isolated state: remaining seconds, in
 - **THEN** it SHALL return `appState: 'idle'` and `remainingSeconds: 0`
 
 ### Requirement: Start, pause, and resume
-A timer instance SHALL support starting from idle or alarm state, pausing while running, and resuming while paused.
+A timer instance SHALL support starting from idle or alarm state, pausing while running, resuming while paused, and restarting from completed state using the original duration.
 
 #### Scenario: Start from idle
 - **WHEN** the user presses Start on a timer with a non-zero time set
-- **THEN** the timer transitions to running state and begins counting down
+- **THEN** the timer transitions to running state and begins counting down; the original duration is saved internally for use by a later Restart
 
 #### Scenario: Pause while running
 - **WHEN** the user presses Pause on a running timer
@@ -33,6 +33,10 @@ A timer instance SHALL support starting from idle or alarm state, pausing while 
 #### Scenario: Resume from paused
 - **WHEN** the user presses Resume on a paused timer
 - **THEN** the countdown continues from where it was paused
+
+#### Scenario: Restart from completed
+- **WHEN** a timer is in completed state and the user clicks Restart
+- **THEN** the timer SHALL transition to running state, restoring the original duration that was set when the timer was first started, and the display SHALL show that duration counting down
 
 ### Requirement: Reset
 A timer instance SHALL return to idle state, clear the display to 00:00, unlock inputs, and cancel any active speech alarm when reset.

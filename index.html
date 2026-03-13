@@ -589,6 +589,7 @@
     function createTimer(name, schemeClass, onTick) {
       const id = ++timerSeq;
       let remainingSeconds = 0;
+      let originalSeconds  = 0;
       let intervalId       = null;
       let appState         = 'idle'; // idle | running | paused | alarm | completed
 
@@ -692,10 +693,16 @@
         if (appState === 'idle' || appState === 'alarm') {
           const secs = getInputSeconds();
           if (secs === 0) { setStatus('Please set a time first.'); return; }
+          if (appState === 'idle') originalSeconds = secs;
           cancelAlarm();
           display.classList.remove('alarm-active');
           remainingSeconds = secs;
           updateDisplay(secs);
+        } else if (appState === 'completed') {
+          cancelAlarm();
+          display.classList.remove('alarm-active');
+          remainingSeconds = originalSeconds;
+          updateDisplay(originalSeconds);
         }
         clearInterval(intervalId);
         intervalId = setInterval(tick, 1000);

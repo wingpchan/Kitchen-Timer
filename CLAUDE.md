@@ -37,6 +37,7 @@ idle → running → paused → running
 running → alarm (at 0)
 alarm → completed (Reset)
 completed → idle (Reset)
+completed → running (Restart — restores original duration)
 running | paused | idle → idle (Reset)
 ```
 
